@@ -20,7 +20,8 @@ def create_random_cube(
     R = R[0]+(R[1]-R[0])*rand.random()
     x = R*cos(theta)*sin(phi)
     y = R*sin(theta)*sin(phi)
-    z = R*cos(phi)
+    z= 4*30.48
+    # z = R*cos(phi)
     loc = (x,y,z)
 
     # create a cube object
@@ -72,7 +73,8 @@ def create_random_sphere(
     R = R[0]+(R[1]-R[0])*rand.random()
     x = R*cos(theta)*sin(phi)
     y = R*sin(theta)*sin(phi)
-    z = R*cos(phi)
+    z = 4*30.48
+    # z = R*cos(phi)
     loc = (x,y,z)    
     
     # create a cube object
@@ -109,11 +111,11 @@ def create_flat_background():
     """
     create a background composed of 3 planes
     """
-    N = 30.48
+    N = 30.48/2
     bpy.ops.mesh.primitive_plane_add( 
             radius=N, 
             enter_editmode=False, 
-            location=(0,0,0),
+            location=(0,0,8*N),
             rotation=(0,0,0),
             layers=(
                  True, False, False, False, False,
@@ -161,11 +163,12 @@ def create_camera(
     cam_object.select = True
 
     # Place the camera in a random location within the given range
-    theta = ((range_theta[1]-range_theta[0])*rand.random()+range_theta[0]); 
+    theta = ((range_theta[1]-range_theta[0])*rand.random()+range_theta[0]);
     phi = ((range_phi[1]-range_phi[0])*rand.random()+range_phi[0]);
     x = R*cos(theta)*sin(phi)
     y = R*sin(theta)*sin(phi)
-    z = R*cos(phi)
+    z = 5*30.48
+    # z = R*cos(phi)
     cam_object.location = (x,y,z)
 
     # set up camera focal properties
@@ -250,7 +253,7 @@ def import_rowdy(filename="RowdyWalker#6",
         R=[0,10],
         range_theta=[0,2*pi], 
         range_phi=[0,pi],
-        size=[0.03,0.01]):
+        size=[0.03,0.01]): #actual size 0.075 scale
     # import rowdy in to the blender scene
     # print(filename)
     bpy.ops.import_mesh.stl(filepath=filename)
@@ -258,7 +261,7 @@ def import_rowdy(filename="RowdyWalker#6",
     # print(filename)
     # capitalize the filename for some fkin reason
     obj = bpy.data.objects[filename]#.capitalize()]
-
+    bpy.ops.object.origin_set = (type = 'ORIGIN_CENTER_OF_MASS')
     # scale the rowdy to an appropriate size
     obj.scale *= size[0] + (size[1]-size[0])*rand.random()
 
@@ -271,6 +274,7 @@ def import_rowdy(filename="RowdyWalker#6",
     R = R[0]+(R[1]-R[0])*rand.random()
     x = R*cos(theta)*sin(phi)
     y = R*sin(theta)*sin(phi)
-    z = R*cos(phi)
+    z = 4*30.48
+    # z = R*cos(phi)
     obj.location = (x,y,z)
 
