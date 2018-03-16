@@ -125,6 +125,19 @@ def create_flat_background():
                 False, False, False, False, False
                 )
             )
+    N = 30.48 / 2
+    bpy.ops.mesh.primitive_plane_add(
+        radius=N*4,
+        enter_editmode=False,
+        location=(0, 0, 6 * N-0.02),
+        rotation=(0, 0, 0),
+        layers=(
+            True, False, False, False, False,
+            False, False, False, False, False,
+            False, False, False, False, False,
+            False, False, False, False, False
+        )
+    )
 
 def clean_up_scene():
     for scene in bpy.data.scenes:
@@ -149,7 +162,7 @@ def create_camera(
         Rx=[30.48,1.5*30.48],
         Ry=[-0.5*30.48,0.5*30.48],
         Rz=[3.75*30.48,4.25*30.48],
-        view_range=[40,50]
+        view_range=[50,70]
         ):
     scene = bpy.context.scene
 
@@ -164,12 +177,16 @@ def create_camera(
     cam_object.select = True
 
     # Place the camera in a random location within the given range
-    x = rand.uniform(Rx[0],Rx[1])
-    y = rand.uniform(Ry[0],Ry[1])
-    z = rand.uniform(Rz[0],Rz[1])
-    theta = norm([x,y,z])
+    x = rand.uniform(Rx[0], Rx[1])
+    y = rand.uniform(Ry[0], Ry[1])
+    z = rand.uniform(Rz[0], Rz[1])
+    # x= 30.48
+    # y=0
+    # z = 4*30.48
+    zz= z-3*30.48
+    R = norm([x, y, zz],ord=2)
     # print(theta)
-    cam_object.location = (x,y,z)
+    cam_object.location = (x, y, z)
 
     # set up camera focal properties
     cam_object.data.stereo.convergence_distance = 10000
@@ -177,16 +194,16 @@ def create_camera(
     cam_object.data.stereo.interocular_distance = 0.3
     
     # Aim camera at the origin
-    xang = acos(z/theta)
+    zang = atan2(y,x)
     # xang = acos(z/R)
-    zang = acos(x/theta)
-    print(zang,xang)
+    xang = acos(zz/R)
+    print(xang,zang)
     print(zang*180/pi,xang*180/pi)
     # print(x,y,xang)
     # if ( z<0):
     #     cam_object.rotation_euler = (xang, 0, pi-zang)
     # elif(x>0 and y>0 and z>0):
-    cam_object.rotation_euler = (xang, 0, pi-zang)
+    cam_object.rotation_euler = (xang-5*pi/180, 0, pi/2+zang)
     # else:
     #     cam_object.rotation_euler = (xang, 0, -zang)
 
