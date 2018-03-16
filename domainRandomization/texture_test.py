@@ -16,6 +16,7 @@ def createMaterials():
 # Create new material
     mat = bpy.data.materials.new('TexMat')
     mat.diffuse_shader='LAMBERT'
+    mat.diffuse_intensity=0.75
     mat.alpha = 0
     mat.diffuse_color = (rand.random(), rand.random(), rand.random())
 

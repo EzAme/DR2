@@ -27,7 +27,7 @@ def makeascene(val=0):
 
 if __name__ == "__main__":
     # the number of scenes
-    N = 20
+    N = 10
     ncams = 2
     N = int(N/ncams)
 
@@ -44,12 +44,13 @@ if __name__ == "__main__":
                 add_random_shape()
         else:
             # add rowdy and add j random shapes with textures
-            fun.import_rowdy(filename="rowdy.STL",
+            # fun.import_rowdy(filename="rowdy.STL",
             # fun.import_rowdy(filename="fastener1.stl",
+            fun.import_rowdy(filename="QuarterInAW.stl",
                     R=[4,6],
                     range_theta=[-0.7853981634,2.3561944902],
                     range_phi=[0,1.25],
-                    size=[0.05,0.03])
+                    size=0.1)
             for k in range(j-1):
                 add_random_shape()
         fun.randomize_texture()
@@ -60,17 +61,14 @@ if __name__ == "__main__":
                     range_phi=[0,1.5707963268])
             
         for k in range(ncams):
-            fun.create_camera(R=15, 
-                    range_theta=[0,1.5707963268],
-                    range_phi=[0,1.5707963268],
-                    view_range=[30,60])
-            if k == 0:
-                if i<N/2:
-                    fun.render_scene(id="",ofilename="drimages/not_rowdy/set"+str(i)+"_image"+str(k)+".png")
-                else:
-                    fun.render_scene(id="",ofilename="drimages/rowdy/set"+str(i)+"_image"+str(k)+".png")
-            else:
-                if i<N/2:
-                    fun.render_scene(id=".00"+str(k),ofilename="drimages/not_rowdy/set"+str(i)+"_image"+str(k)+".png")
-                else:
-                    fun.render_scene(id=".00"+str(k),ofilename="drimages/rowdy/set"+str(i)+"_image"+str(k)+".png")
+            fun.create_camera()
+            # if k == 0:
+            #     if i<N/2:
+            #         fun.render_scene(id="",ofilename="drimages/not_rowdy/set"+str(i)+"_image"+str(k)+".png")
+            #     else:
+            #         fun.render_scene(id="",ofilename="drimages/rowdy/set"+str(i)+"_image"+str(k)+".png")
+            # else:
+            #     if i<N/2:
+            #         fun.render_scene(id=".00"+str(k),ofilename="drimages/not_rowdy/set"+str(i)+"_image"+str(k)+".png")
+            #     else:
+            #         fun.render_scene(id=".00"+str(k),ofilename="drimages/rowdy/set"+str(i)+"_image"+str(k)+".png")

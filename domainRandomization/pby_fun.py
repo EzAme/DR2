@@ -1,6 +1,7 @@
 import bpy
 import os
 import random as rand
+from numpy.linalg import norm
 import texture_test as tex
 from math import sin, cos, pi, asin, acos, atan2
 
@@ -20,7 +21,7 @@ def create_random_cube(
     R = R[0]+(R[1]-R[0])*rand.random()
     x = R*cos(theta)*sin(phi)
     y = R*sin(theta)*sin(phi)
-    z= 4*30.48
+    z= 3*30.48
     # z = R*cos(phi)
     loc = (x,y,z)
 
@@ -73,7 +74,7 @@ def create_random_sphere(
     R = R[0]+(R[1]-R[0])*rand.random()
     x = R*cos(theta)*sin(phi)
     y = R*sin(theta)*sin(phi)
-    z = 4*30.48
+    z = 3*30.48
     # z = R*cos(phi)
     loc = (x,y,z)    
     
@@ -115,7 +116,7 @@ def create_flat_background():
     bpy.ops.mesh.primitive_plane_add( 
             radius=N, 
             enter_editmode=False, 
-            location=(0,0,8*N),
+            location=(0,0,6*N),
             rotation=(0,0,0),
             layers=(
                  True, False, False, False, False,
@@ -145,9 +146,9 @@ def clean_up_scene():
 
 
 def create_camera(
-        R=8,
-        range_theta=[0,2*pi], 
-        range_phi=[0,pi],
+        Rx=[30.48,1.5*30.48],
+        Ry=[-0.5*30.48,0.5*30.48],
+        Rz=[3.75*30.48,4.25*30.48],
         view_range=[40,50]
         ):
     scene = bpy.context.scene
@@ -163,12 +164,11 @@ def create_camera(
     cam_object.select = True
 
     # Place the camera in a random location within the given range
-    theta = ((range_theta[1]-range_theta[0])*rand.random()+range_theta[0]);
-    phi = ((range_phi[1]-range_phi[0])*rand.random()+range_phi[0]);
-    x = R*cos(theta)*sin(phi)
-    y = R*sin(theta)*sin(phi)
-    z = 5*30.48
-    # z = R*cos(phi)
+    x = rand.uniform(Rx[0],Rx[1])
+    y = rand.uniform(Ry[0],Ry[1])
+    z = rand.uniform(Rz[0],Rz[1])
+    theta = norm([x,y,z])
+    # print(theta)
     cam_object.location = (x,y,z)
 
     # set up camera focal properties
@@ -177,14 +177,18 @@ def create_camera(
     cam_object.data.stereo.interocular_distance = 0.3
     
     # Aim camera at the origin
-    zang = atan2(y,x)
-    xang = acos(z/R)
-    if ( z<0):
-        cam_object.rotation_euler = (xang, 0, pi-zang)
-    elif(x>0 and y>0 and z>0):
-        cam_object.rotation_euler = (xang, 0, pi/2+zang)
-    else:
-        cam_object.rotation_euler = (xang, 0, -zang)
+    xang = acos(z/theta)
+    # xang = acos(z/R)
+    zang = acos(x/theta)
+    print(zang,xang)
+    print(zang*180/pi,xang*180/pi)
+    # print(x,y,xang)
+    # if ( z<0):
+    #     cam_object.rotation_euler = (xang, 0, pi-zang)
+    # elif(x>0 and y>0 and z>0):
+    cam_object.rotation_euler = (xang, 0, pi-zang)
+    # else:
+    #     cam_object.rotation_euler = (xang, 0, -zang)
 
     cam_object.select = False
 
@@ -253,7 +257,7 @@ def import_rowdy(filename="RowdyWalker#6",
         R=[0,10],
         range_theta=[0,2*pi], 
         range_phi=[0,pi],
-        size=[0.03,0.01]): #actual size 0.075 scale
+        size=[0.1]): #actual size 0.075 scale
     # import rowdy in to the blender scene
     # print(filename)
     bpy.ops.import_mesh.stl(filepath=filename)
@@ -261,9 +265,9 @@ def import_rowdy(filename="RowdyWalker#6",
     # print(filename)
     # capitalize the filename for some fkin reason
     obj = bpy.data.objects[filename]#.capitalize()]
-    bpy.ops.object.origin_set = (type = 'ORIGIN_CENTER_OF_MASS')
+    bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_MASS')
     # scale the rowdy to an appropriate size
-    obj.scale *= size[0] + (size[1]-size[0])*rand.random()
+    obj.scale = [0.1, 0.1, 0.1]
 
     # randomize the orientations of rowdy
     obj.rotation_euler = (pi*rand.random(), pi*rand.random(), pi*rand.random())
@@ -274,7 +278,7 @@ def import_rowdy(filename="RowdyWalker#6",
     R = R[0]+(R[1]-R[0])*rand.random()
     x = R*cos(theta)*sin(phi)
     y = R*sin(theta)*sin(phi)
-    z = 4*30.48
+    z = 3*30.48
     # z = R*cos(phi)
     obj.location = (x,y,z)
 
