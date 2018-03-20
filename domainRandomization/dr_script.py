@@ -11,7 +11,7 @@ from math import pi
 # for material in bpy.data.materials:
 #     if not material.users:
 #         bpy.data.materials.remove(material)
-def add_random_shape(R=[2,6], size=[1.5,1], range_theta=[0,pi/2], range_phi=[0,pi/2]):
+def add_random_shape(R=[2,6], size=[.5, 1], range_theta=[0,pi/2], range_phi=[0,pi/2]):
     i = randint(1,2)
     if i is 1:
         fun.create_random_cube(R=R,size=size);

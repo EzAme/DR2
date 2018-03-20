@@ -19,15 +19,18 @@ def create_random_cube(
     theta = ((range_theta[1]-range_theta[0])*rand.random()+range_theta[0]); 
     phi = ((range_phi[1]-range_phi[0])*rand.random()+range_phi[0]);
     R = R[0]+(R[1]-R[0])*rand.random()
-    x = R*cos(theta)*sin(phi)
-    y = R*sin(theta)*sin(phi)
-    z= 3*30.48
-    # z = R*cos(phi)
+    # x = R*cos(theta)*sin(phi)
+    # y = R*sin(theta)*sin(phi)
+    # z= 3*30.48
+    x = rand.uniform(-14.6, 14.6)
+    y = rand.uniform(-14.6, 14.6)
+    z = 3*30.48
+
     loc = (x,y,z)
 
     # create a cube object
-    bpy.ops.mesh.primitive_cube_add( 
-        location= loc,
+    bpy.ops.mesh.primitive_cube_add(
+        location=loc,
         radius=rand.uniform(size[0], size[1])
         )
     bpy.ops.transform.rotate(
@@ -72,15 +75,19 @@ def create_random_sphere(
     theta = ((range_theta[1]-range_theta[0])*rand.random()+range_theta[0]); 
     phi = ((range_phi[1]-range_phi[0])*rand.random()+range_phi[0]);
     R = R[0]+(R[1]-R[0])*rand.random()
-    x = R*cos(theta)*sin(phi)
-    y = R*sin(theta)*sin(phi)
+    # x = R*cos(theta)*sin(phi)
+    # y = R*sin(theta)*sin(phi)
+    # z = 3*30.48
+
+    x = rand.uniform(-14.6, 14.6)
+    y = rand.uniform(-14.6, 14.6)
     z = 3*30.48
     # z = R*cos(phi)
     loc = (x,y,z)    
     
     # create a cube object
-    bpy.ops.mesh.primitive_ico_sphere_add( 
-        location= loc,
+    bpy.ops.mesh.primitive_ico_sphere_add(
+        location=loc,
         size=rand.uniform(size[0], size[1])
         )
     bpy.ops.transform.rotate(
@@ -197,8 +204,8 @@ def create_camera(
     zang = atan2(y,x)
     # xang = acos(z/R)
     xang = acos(zz/R)
-    print(xang,zang)
-    print(zang*180/pi,xang*180/pi)
+    # print(xang,zang)
+    # print(zang*180/pi,xang*180/pi)
     # print(x,y,xang)
     # if ( z<0):
     #     cam_object.rotation_euler = (xang, 0, pi-zang)
@@ -260,14 +267,14 @@ def render_scene( id="", ofilename='image'+str(id)+".png"):
 def randomize_texture():
     for obj in bpy.data.objects:
         if obj.type == 'MESH':
-            mat = tex.createMaterials()
-            # mat = bpy.data.materials.new(name='Material')
-            # mat.diffuse_color = (rand.random(), rand.random(), rand.random())
-            # tex = bpy.data.textures.new("SomeName", 'IMAGE')
-            # slot = mat.texture_slots.add()
-            # slot.texture = tex
-            # obj.data.materials.append(mat)
-            # bpy.ops.object.material_slot_remove()
+            # mat = tex.createMaterials()
+            mat = bpy.data.materials.new(name='Material')
+            mat.diffuse_color = (rand.random(), rand.random(), rand.random())
+            tex = bpy.data.textures.new("SomeName", 'IMAGE')
+            slot = mat.texture_slots.add()
+            slot.texture = tex
+            obj.data.materials.append(mat)
+            bpy.ops.object.material_slot_remove()
             obj.data.materials.append(mat)
             
 def import_rowdy(filename="RowdyWalker#6",
@@ -282,20 +289,53 @@ def import_rowdy(filename="RowdyWalker#6",
     # print(filename)
     # capitalize the filename for some fkin reason
     obj = bpy.data.objects[filename]#.capitalize()]
-    bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_MASS')
-    # scale the rowdy to an appropriate size
-    obj.scale = [0.1, 0.1, 0.1]
 
+    # print(filename)
+    # o = bpy.context.object=bpy.data.objects[filename]  # active object
+    # print(o)
+    mw = obj.matrix_world  # Active object's world matrix
+    glob_vertex_coordinates = [mw * v.co for v in obj.data.vertices]  # Global coordinates of vertices
+
+    bpy.ops.object.mode_set(mode='EDIT')  # Change mode of selected object to Edit mode
+    bpy.ops.mesh.select_mode(use_extend=False, use_expand=False,type='VERT')  # Set the type in Edit mode to Vertices
+    bpy.ops.mesh.select_all(action='DESELECT')  # Deselect all
+    bpy.ops.object.mode_set(mode='OBJECT')  # Change mode of selected object to Object mode
+
+    # Find the lowest Z value amongst the object's verts
+    minZ = min([co.z for co in glob_vertex_coordinates])
+
+    # Select all the vertices that are on the lowest Z
+    for v in obj.data.vertices:
+        if (mw * v.co).z == minZ:
+            v.select = True
+
+    bpy.ops.object.mode_set(mode='EDIT')  # Change mode of selected object to Edit mode
+    # print(bpy.context.area)
+    current_area_type = bpy.context.area.type  # Save the current area type to a variable
+    area = bpy.context.area  # Change the area to 3D view in order to get rid of wrong context error
+    old_type = area.type  # Change the area to 3D view in order to get rid of wrong context error
+    area.type = 'VIEW_3D'  # Change the area to 3D view in order to get rid of wrong context error
+    bpy.ops.view3d.snap_cursor_to_selected()  # Move the cursor to selected
+    bpy.ops.object.mode_set(mode='OBJECT')  # Set the mode back to Object mode
+    bpy.ops.object.origin_set(type='ORIGIN_CURSOR')  # Move the selected object origing's to the 3D cursor's location
+    bpy.context.area.type = current_area_type  # Set the area type back to what it was before changing it to 3D view
+
+
+    # print(obj.dimensions)
+    # bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_MASS')
+    # scale the rowdy to an appropriate size
+
+    obj.scale = [0.1, 0.1, 0.1]
     # randomize the orientations of rowdy
-    obj.rotation_euler = (pi*rand.random(), pi*rand.random(), pi*rand.random())
+    obj.rotation_euler = (pi, 0, pi*rand.random())
 
     # place the rowdy within the given bounds
     theta = ((range_theta[1]-range_theta[0])+range_theta[0])*rand.random(); 
     phi = ((range_phi[1]-range_phi[0])+range_phi[0])*rand.random();
     R = R[0]+(R[1]-R[0])*rand.random()
-    x = R*cos(theta)*sin(phi)
-    y = R*sin(theta)*sin(phi)
-    z = 3*30.48
+    x = rand.uniform(-14.6, 14.6)
+    y = rand.uniform(-14.6, 14.6)
+    z = (36+0.498)*30.48/12
     # z = R*cos(phi)
     obj.location = (x,y,z)
 
