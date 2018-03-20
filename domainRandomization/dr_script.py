@@ -12,11 +12,15 @@ from math import pi
 #     if not material.users:
 #         bpy.data.materials.remove(material)
 def add_random_shape(R=[2,6], size=[.5, 1], range_theta=[0,pi/2], range_phi=[0,pi/2]):
-    i = randint(1,2)
+    i = randint(1,4)
     if i is 1:
         fun.create_random_cube(R=R,size=size);
     elif i is 2:
         fun.create_random_sphere(R=R,size=size);
+    elif i is 3:
+        fun.create_random_cylinder(R=R,size=size);
+    elif i is 4:
+        fun.create_random_cone(R=R, size=size);
 
 
 def makeascene(val=0):
@@ -35,7 +39,7 @@ if __name__ == "__main__":
         # create a scene
         makeascene()
         
-        j = randint(0,5)
+        j = randint(0,7)
         p = 1
         # add objects randomly
         if i<N/2:
@@ -56,9 +60,9 @@ if __name__ == "__main__":
         fun.randomize_texture()
         # now that the scene has been created we need to now render the scene
         for k in range(p):
-            fun.create_lamp(R=15,
-                    range_theta=[0,3.14159265],
-                    range_phi=[0,1.5707963268])
+            fun.create_lamp(R=10*30.48,
+                    range_theta=[0,2*3.14159265],
+                    range_phi=[0,3.14159265/4])
             
         for k in range(ncams):
             fun.create_camera()
