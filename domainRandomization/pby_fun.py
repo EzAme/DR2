@@ -341,10 +341,9 @@ def create_camera(
 def create_lamp(
         R=10 * 30.48,
         range_theta=[0, 2*pi],
-        range_phi=[0, pi/4],
-        intensity=5):
+        range_phi=[0, pi/4]):
     scene = bpy.context.scene
-
+    intensity = rand.uniform(0.3, 0.5)
     # Create new lamp datablock
     lamp_data = bpy.data.lamps.new(name="New Lamp", type='AREA')
 
@@ -354,6 +353,7 @@ def create_lamp(
     # Link lamp object to the scene so it'll appear in this scene
     scene.objects.link(lamp_object)
 
+
     # Place lamp to a specified location
     theta = ((range_theta[1] - range_theta[0]) * rand.uniform(0, 1) + range_theta[0]);
     phi = ((range_phi[1] - range_phi[0]) * rand.uniform(0, 1) + range_phi[0]);
@@ -362,22 +362,54 @@ def create_lamp(
     x = R * sin(phi) * cos(theta)
     y = R * sin(phi) * sin(theta)
     z = R * cos(phi)
-    print(theta, theta * 180 / pi)
-    print(phi, phi * 180 / pi)
+    # print(theta, theta * 180 / pi)
+    # print(phi, phi * 180 / pi)
     lamp_object.data.use_specular = 0
+    lamp_object.data.color = (1, 0.95, 0.3)
     lamp_object.location = (x, y, z)
     lamp_object.rotation_euler = (phi+rand.gauss(0, 0.17), 0, theta + pi / 2+rand.gauss(0, 0.17))
     lamp_object.data.energy = intensity
-    lamp_object.data.distance = 90
+    lamp_object.data.distance = 300
     lamp_object.data.gamma = 0.9
     lamp_object.data.shadow_method = "RAY_SHADOW"
-    lamp_object.data.shape = "RECTANGLE"
-    lamp_object.data.size = 30.48 * 5
-    lamp_object.data.size_y = 30.48 * 5
+    lamp_object.data.shape = "SQUARE"
+    lamp_object.data.size = 30.48 * 8
     # And finally select it make active
     lamp_object.select = True
-    scene.objects.active = lamp_object
 
+    scene.objects.active = lamp_object
+    ######
+
+    # Create new lamp datablock
+    lamp_data2 = bpy.data.lamps.new(name="New Lamp2", type='AREA')
+
+    # Create new object with our lamp datablock
+    lamp_object2 = bpy.data.objects.new(name="New Lamp2", object_data=lamp_data2)
+
+    # Link lamp object to the scene so it'll appear in this scene
+    scene.objects.link(lamp_object2)
+
+
+    # theta = ((range_theta[1] - range_theta[0]) * rand.uniform(0, 1) + range_theta[0]);
+    # phi = ((range_phi[1] - range_phi[0]) * rand.uniform(0, 1) + range_phi[0]);
+    x = R * sin(pi/2) * cos(theta+pi)
+    y = R * sin(pi/2) * sin(theta+pi)
+    z = R * cos(pi/2)+7*30.48
+    Rr = norm([x, y, z], ord=2)
+    xang = acos(z/Rr)
+    lamp_object2.data.use_specular = 0
+    lamp_object2.data.color = (0.5, 0.95, 1)
+    lamp_object2.location = (x, y, z)
+    lamp_object2.rotation_euler = (xang+rand.gauss(0, 0.08), 0, theta-pi/2+rand.gauss(0, 0.08))
+    lamp_object2.data.energy = -2.9167*intensity+1.625
+    lamp_object2.data.distance = 300
+    lamp_object2.data.gamma = 0.9
+    lamp_object2.data.shadow_method = "NOSHADOW"
+    lamp_object2.data.shape = "SQUARE"
+    lamp_object2.data.size = 30.48 * 5
+
+
+    scene.objects.active = lamp_object2
     return scene
 
 
