@@ -285,10 +285,10 @@ def clean_up_scene():
 
 
 def create_camera(
-        Rx=[30.48, 1.5 * 30.48],
-        Ry=[-0.5 * 30.48, 0.5 * 30.48],
+        Rx=[.5*30.48, 30.48],
+        Ry=[-0.25 * 30.48, 0.25 * 30.48],
         Rz=[3.75 * 30.48, 4.25 * 30.48],
-        view_range=[50, 70]
+        view_range=[60, 70]
 ):
     scene = bpy.context.scene
 
@@ -489,13 +489,12 @@ def import_rowdy(filename="RowdyWalker#6",
     obj.scale = [0.1, 0.1, 0.1]
     # randomize the orientations of rowdy
     obj.rotation_euler = (pi, 0, pi * rand.random())
-
     # place the rowdy within the given bounds
     # theta = ((range_theta[1]-range_theta[0])+range_theta[0])*rand.random();
     # phi = ((range_phi[1]-range_phi[0])+range_phi[0])*rand.random();
     # R = R[0]+(R[1]-R[0])*rand.random()
-    x = rand.uniform(-14.6, 14.6)
-    y = rand.uniform(-14.6, 14.6)
+    x = rand.randint(-5, 5)*2.54
+    y = rand.randint(-5, 5)*2.54
     z = (36 + 0.498) * 30.48 / 12
     # z = R*cos(phi)
     obj.location = (x, y, z)

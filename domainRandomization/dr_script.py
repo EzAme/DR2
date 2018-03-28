@@ -66,13 +66,13 @@ if __name__ == "__main__":
             
         for k in range(ncams):
             fun.create_camera()
-            # if k == 0:
-            #     if i<N/2:
-            #         fun.render_scene(id="",ofilename="drimages/not_rowdy/set"+str(i)+"_image"+str(k)+".png")
-            #     else:
-            #         fun.render_scene(id="",ofilename="drimages/rowdy/set"+str(i)+"_image"+str(k)+".png")
-            # else:
-            #     if i<N/2:
-            #         fun.render_scene(id=".00"+str(k),ofilename="drimages/not_rowdy/set"+str(i)+"_image"+str(k)+".png")
-            #     else:
-            #         fun.render_scene(id=".00"+str(k),ofilename="drimages/rowdy/set"+str(i)+"_image"+str(k)+".png")
+            if k == 0:
+                if i<N/2:
+                    fun.render_scene(id="",ofilename="drimages/not_rowdy/set"+str(i)+"_image"+str(k)+".png")
+                else:
+                    fun.render_scene(id="",ofilename="drimages/rowdy/set"+str(i)+"_image"+str(k)+".png")
+            else:
+                if i<N/2:
+                    fun.render_scene(id=".00"+str(k),ofilename="drimages/not_rowdy/set"+str(i)+"_image"+str(k)+".png")
+                else:
+                    fun.render_scene(id=".00"+str(k),ofilename="drimages/rowdy/set"+str(i)+"_image"+str(k)+".png")
