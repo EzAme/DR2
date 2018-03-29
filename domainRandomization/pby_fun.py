@@ -46,9 +46,9 @@ def create_random_cube(
     )
 
     # create and add a texture and color
-    mat=bpy.data.materials.new('Matty')
-    mat.diffuse_color = ( rand.random(), rand.random(), rand.random())
-    bpy.data.objects['Cube'].data.materials.append(mat)
+    # mat=bpy.data.materials.new('Matty')
+    # mat.diffuse_color = ( rand.random(), rand.random(), rand.random())
+    # bpy.data.objects['Cube'].data.materials.append(mat)
     # mat = tex.createMaterials()
     # bpy.data.objects['Cube'].data.materials.append(mat)
     # if not len(objID):
@@ -105,9 +105,9 @@ def create_random_sphere(
     )
 
     # create and add a texture and color
-    mat=bpy.data.materials.new('Matty')
-    mat.diffuse_color = ( rand.random(), rand.random(), rand.random())
-    bpy.data.objects['Sphere'].data.materials.append(mat)
+    # mat=bpy.data.materials.new('Matty')
+    # mat.diffuse_color = ( rand.random(), rand.random(), rand.random())
+    # bpy.data.objects['Sphere'].data.materials.append(mat)
     # if not len(objID):
     #     mat = bpy.data.materials['Material']
     #     mat.diffuse_color = ( rand.random(), rand.random(), rand.random())
@@ -162,9 +162,9 @@ def create_random_cylinder(
     )
 
     # create and add a texture and color
-    mat=bpy.data.materials.new('Matty')
-    mat.diffuse_color = ( rand.random(), rand.random(), rand.random())
-    bpy.data.objects['Cylinder'].data.materials.append(mat)
+    # mat=bpy.data.materials.new('Matty')
+    # mat.diffuse_color = ( rand.random(), rand.random(), rand.random())
+    # bpy.data.objects['Cylinder'].data.materials.append(mat)
     # if not len(objID):
     #     mat = bpy.data.materials['Material']
     #     mat.diffuse_color = ( rand.random(), rand.random(), rand.random())
@@ -219,9 +219,9 @@ def create_random_cone(
     )
 
     # create and add a texture and color
-    mat=bpy.data.materials.new('Matty')
-    mat.diffuse_color = ( rand.random(), rand.random(), rand.random())
-    bpy.data.objects['Cone'].data.materials.append(mat)
+    # mat=bpy.data.materials.new('Matty')
+    # mat.diffuse_color = ( rand.random(), rand.random(), rand.random())
+    # bpy.data.objects['Cone'].data.materials.append(mat)
     # if not len(objID):
     #     mat = bpy.data.materials['Material']
     #     mat.diffuse_color = ( rand.random(), rand.random(), rand.random())
@@ -238,6 +238,8 @@ def create_flat_background():
     create a background composed of 3 planes
     """
     N = 30.48 / 2
+    bpy.context.scene.unit_settings.system = "METRIC"
+    bpy.context.scene.unit_settings.scale_length = 0.01
     bpy.ops.mesh.primitive_plane_add(
         radius=N,
         enter_editmode=False,
@@ -264,8 +266,7 @@ def create_flat_background():
         )
     )
 
-
-def clean_up_scene():
+def clean_up_scene_init():
     for scene in bpy.data.scenes:
 
         for obj in scene.objects:
@@ -280,8 +281,19 @@ def clean_up_scene():
     ):
         for id_data in bpy_data_iter:
             bpy_data_iter.remove(id_data)
-    bpy.context.scene.unit_settings.system = "METRIC"
-    bpy.context.scene.unit_settings.scale_length = 0.01
+
+def clean_up_scene():
+
+    k = bpy.data.objects
+    for i in k:
+        if i.name == "Plane":
+            continue
+        if i.name == "Plane.001":
+            continue
+        if i.name == "QuarterInAW":
+            continue
+        k.remove(k[i.name])
+
 
 
 def create_camera(
@@ -425,10 +437,13 @@ def render_scene(id="", ofilename='image' + str(id) + ".png"):
 
 
 def randomize_texture():
+    for material in bpy.data.materials:
+        bpy.data.materials.remove(material)
+
     for obj in bpy.data.objects:
         if obj.type == 'MESH':
             # mat = tex.createMaterials()
-            mat = bpy.data.materials.new(name='Material')
+            mat = bpy.data.materials.new(name='Mat')
             mat.diffuse_color = (rand.random(), rand.random(), rand.random())
             # tex = bpy.data.textures.new("SomeName", 'IMAGE')
             # slot = mat.texture_slots.add()
@@ -450,6 +465,7 @@ def import_rowdy(filename="RowdyWalker#6",
     # # print(filename)
     # # capitalize the filename for some fkin reason
     obj = bpy.data.objects[filename]  # .capitalize()]
+    obj.scale = [0.1, 0.1, 0.1]
     ################
     # print(filename)
     # o = bpy.context.object=bpy.data.objects[filename]  # active object
@@ -481,12 +497,13 @@ def import_rowdy(filename="RowdyWalker#6",
     bpy.ops.object.origin_set(type='ORIGIN_CURSOR')  # Move the selected object origing's to the 3D cursor's location
     bpy.context.area.type = current_area_type  # Set the area type back to what it was before changing it to 3D view
     ###################
-
+def move_obj(filename = "RowdyWalker#6"):
     # print(obj.dimensions)
     # bpy.ops.object.origin_set(type='ORIGIN_CENTER_OF_MASS')
     # scale the rowdy to an appropriate size
+    filename = os.path.splitext(filename)[0]
+    obj = bpy.data.objects[filename]
 
-    obj.scale = [0.1, 0.1, 0.1]
     # randomize the orientations of rowdy
     obj.rotation_euler = (pi, 0, pi * rand.random())
     # place the rowdy within the given bounds
@@ -495,6 +512,23 @@ def import_rowdy(filename="RowdyWalker#6",
     # R = R[0]+(R[1]-R[0])*rand.random()
     x = rand.randint(-5, 5)*2.54
     y = rand.randint(-5, 5)*2.54
-    z = (36 + 0.498) * 30.48 / 12
+    # z = (36 + 0.498) * 30.48 / 12
+    z = (36 - 0.133) * 30.48 / 12
     # z = R*cos(phi)
     obj.location = (x, y, z)
+
+# import sys
+# import os
+# import bpy
+# import random as rand
+# sys.path.append("/home/ez/DR2/domainRandomization")
+# import pby_fun as fun
+# #for material in bpy.data.materials:
+#     #bpy.data.materials.remove(material)
+# for i in bpy.data.objects:
+#     if i.type == "MESH":
+#         print(i.name,i.type)
+#         mat = bpy.data.materials.new(name='Mat')
+#         mat.diffuse_color = (rand.random(), rand.random(), rand.random())
+#         bpy.ops.object.material_slot_remove()
+#         bpy.data.objects[i.name].data.materials.append(mat)
