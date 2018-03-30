@@ -437,20 +437,31 @@ def render_scene(id="", ofilename='image' + str(id) + ".png"):
 
 
 def randomize_texture():
-    for material in bpy.data.materials:
-        bpy.data.materials.remove(material)
-
-    for obj in bpy.data.objects:
-        if obj.type == 'MESH':
-            # mat = tex.createMaterials()
-            mat = bpy.data.materials.new(name='Mat')
+    # for material in bpy.data.materials:
+    #     bpy.data.materials.remove(material)
+    #
+    # for obj in bpy.data.objects:
+    #     if obj.type == 'MESH':
+    #         # mat = tex.createMaterials()
+    #         mat = bpy.data.materials.new(name='Mat')
+    #         mat.diffuse_color = (rand.random(), rand.random(), rand.random())
+    #         # tex = bpy.data.textures.new("SomeName", 'IMAGE')
+    #         # slot = mat.texture_slots.add()
+    #         # slot.texture = tex
+    #         # obj.data.materials.append(mat)
+    #         bpy.ops.object.material_slot_remove()
+    #         obj.data.materials.append(mat)
+    for i in bpy.data.objects:
+        if i.type == "MESH":
+            # print(i.name, i.type)
+            mat = bpy.data.materials.new(name=i.name + 'Mat')
             mat.diffuse_color = (rand.random(), rand.random(), rand.random())
-            # tex = bpy.data.textures.new("SomeName", 'IMAGE')
-            # slot = mat.texture_slots.add()
-            # slot.texture = tex
-            # obj.data.materials.append(mat)
-            bpy.ops.object.material_slot_remove()
-            obj.data.materials.append(mat)
+            if len(i.material_slots) > 1:
+                bpy.data.objects[i.name].material_slots[0].material = mat
+            else:
+                bpy.data.objects[i.name].data.materials.append(mat)
+            # bpy.ops.object.material_slot_assign()
+            # bpy.data.objects.materials.pop(0, update_data=True)
 
 
 def import_rowdy(filename="RowdyWalker#6",

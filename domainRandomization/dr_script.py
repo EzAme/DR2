@@ -52,7 +52,7 @@ if __name__ == "__main__":
 
         for k in range(j-1):
             add_random_shape()
-        # fun.randomize_texture()
+        fun.randomize_texture()
         # now that the scene has been created we need to now render the scene
         for k in range(p):
             fun.create_lamp(R=10*30.48,
