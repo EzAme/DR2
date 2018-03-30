@@ -527,19 +527,3 @@ def move_obj(filename = "RowdyWalker#6"):
     z = (36 - 0.133) * 30.48 / 12
     # z = R*cos(phi)
     obj.location = (x, y, z)
-
-# import sys
-# import os
-# import bpy
-# import random as rand
-# sys.path.append("/home/ez/DR2/domainRandomization")
-# import pby_fun as fun
-# #for material in bpy.data.materials:
-#     #bpy.data.materials.remove(material)
-# for i in bpy.data.objects:
-#     if i.type == "MESH":
-#         print(i.name,i.type)
-#         mat = bpy.data.materials.new(name='Mat')
-#         mat.diffuse_color = (rand.random(), rand.random(), rand.random())
-#         bpy.ops.object.material_slot_remove()
-#         bpy.data.objects[i.name].data.materials.append(mat)
