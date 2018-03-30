@@ -4,6 +4,7 @@ import random as rand
 from numpy.linalg import norm
 import texture_test as tex
 from math import sin, cos, pi, asin, acos, atan2
+import csv
 
 
 def create_random_cube(
@@ -521,9 +522,27 @@ def move_obj(filename = "RowdyWalker#6"):
     # theta = ((range_theta[1]-range_theta[0])+range_theta[0])*rand.random();
     # phi = ((range_phi[1]-range_phi[0])+range_phi[0])*rand.random();
     # R = R[0]+(R[1]-R[0])*rand.random()
-    x = rand.randint(-5, 5)*2.54
-    y = rand.randint(-5, 5)*2.54
+    x = rand.randint(-5, 5)
+    y = rand.randint(-5, 5)
+    xy = [x+6, y+6]
     # z = (36 + 0.498) * 30.48 / 12
     z = (36 - 0.133) * 30.48 / 12
     # z = R*cos(phi)
-    obj.location = (x, y, z)
+    obj.location = (x*2.54, y*2.54, z)
+    return xy
+
+# import sys
+# import os
+# import bpy
+# import random as rand
+# sys.path.append("/home/ez/DR2/domainRandomization")
+# import pby_fun as fun
+# #for material in bpy.data.materials:
+#     #bpy.data.materials.remove(material)
+# for i in bpy.data.objects:
+#     if i.type == "MESH":
+#         print(i.name,i.type)
+#         mat = bpy.data.materials.new(name='Mat')
+#         mat.diffuse_color = (rand.random(), rand.random(), rand.random())
+#         bpy.ops.object.material_slot_remove()
+#         bpy.data.objects[i.name].data.materials.append(mat)

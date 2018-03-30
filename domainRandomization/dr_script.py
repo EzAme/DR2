@@ -6,7 +6,8 @@ import pby_fun as fun
 import texture_test as tex
 from random import randint
 from math import pi
-
+import csv
+import datetime as dt
 # Delete excess materials
 # for material in bpy.data.materials:
 #     if not material.users:
@@ -36,6 +37,7 @@ def makeascene(val=0):
 
 if __name__ == "__main__":
     # the number of scenes
+    ctime=str(dt.datetime.now())
     N = 10
     ncams = 2
     N = int(N/ncams)
@@ -46,7 +48,7 @@ if __name__ == "__main__":
         p = 1
         j = randint(0, 7)
         fun.clean_up_scene()
-        fun.move_obj(filename="QuarterInAW.stl")
+        pos=fun.move_obj(filename="QuarterInAW.stl")
 
 
 
@@ -61,6 +63,10 @@ if __name__ == "__main__":
             
         for k in range(ncams):
             fun.create_camera()
+            with open('drimages/Position/' + ctime + '.csv', 'a') as csvfile:
+                writer = csv.writer(csvfile)
+                writer.writerow(pos)
+
             if k == 0:
                 # if i<N/2:
                     # fun.render_scene(id="",ofilename="drimages/not_rowdy/set"+str(i)+"_image"+str(k)+".png")
