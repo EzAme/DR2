@@ -33,8 +33,11 @@ def makeascene(val=0):
                      range_phi=[0, 1.25],
                      size=0.1)
     fun.create_flat_background()
-
-
+def make_csv(val=0):
+    if val == 1:
+        with open('drimages/Position/' + ctime + '.csv', 'a') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(pos)
 if __name__ == "__main__":
     # the number of scenes
     ctime=str(dt.datetime.now())
@@ -63,17 +66,8 @@ if __name__ == "__main__":
             
         for k in range(ncams):
             fun.create_camera()
-            with open('drimages/Position/' + ctime + '.csv', 'a') as csvfile:
-                writer = csv.writer(csvfile)
-                writer.writerow(pos)
-
+            make_csv(val=1)
             if k == 0:
-                # if i<N/2:
-                    # fun.render_scene(id="",ofilename="drimages/not_rowdy/set"+str(i)+"_image"+str(k)+".png")
-                # else:
-                    fun.render_scene(id="",ofilename="drimages/pos/set"+str(i)+"_image"+str(k)+".png")
+                fun.render_scene(id="",ofilename="drimages/pos/" + ctime + "/set"+str(i)+"_image"+str(k)+".png")
             else:
-                # if i<N/2:
-                #     fun.render_scene(id=".00"+str(k),ofilename="drimages/not_rowdy/set"+str(i)+"_image"+str(k)+".png")
-                # else:
-                    fun.render_scene(id=".00"+str(k),ofilename="drimages/pos/set"+str(i)+"_image"+str(k)+".png")
+                fun.render_scene(id=".00"+str(k),ofilename="drimages/pos/" + ctime + "/set"+str(i)+"_image"+str(k)+".png")
