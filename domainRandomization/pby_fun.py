@@ -298,8 +298,8 @@ def clean_up_scene():
 
 
 def create_camera(
-        Rx=[.5*30.48, 30.48],
-        Ry=[-0.25 * 30.48, 0.25 * 30.48],
+        Rx=[-0.25*30.48, 0.25*30.48],
+        Ry=[-0.5 * 30.48, -30.48],
         Rz=[3.75 * 30.48, 4.25 * 30.48],
         view_range=[60, 70]
 ):
@@ -528,8 +528,9 @@ def move_obj(filename = "RowdyWalker#6"):
     # z = (36 + 0.498) * 30.48 / 12
     z = (36 - 0.133) * 30.48 / 12
     # z = R*cos(phi)
-    obj.location = (x*2.54, y*2.54, z)
+    obj.location = (x*2.54,y*2.54, z)
     return xy
+# def get_pixel_position():
 
 # import sys
 # import os
