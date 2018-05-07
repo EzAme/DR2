@@ -3,6 +3,7 @@ import sys
 import os
 sys.path.append("/home/ez/DR2/domainRandomization")
 import pby_fun as fun
+import Pixel as pix
 import texture_test as tex
 from random import randint
 from math import pi
@@ -33,6 +34,10 @@ def makeascene(val=0):
                      range_phi=[0, 1.25],
                      size=0.1)
     fun.create_flat_background()
+    # for area in bpy.context.screen.areas:
+    #     if area.type == 'VIEW_3D':
+    #         area.spaces[0].region_3d.view_perspective = 'CAMERA'
+    #         break
 def make_csv(val=0):
     if val == 1:
         with open('drimages/Position/' + ctime + '.csv', 'a') as csvfile:
@@ -66,8 +71,12 @@ if __name__ == "__main__":
             
         for k in range(ncams):
             fun.create_camera()
-            make_csv(val=1)
+
+            make_csv(val=0)
             if k == 0:
                 fun.render_scene(id="",ofilename="drimages/pos/" + ctime + "/set"+str(i)+"_image"+str(k)+".png")
             else:
                 fun.render_scene(id=".00"+str(k),ofilename="drimages/pos/" + ctime + "/set"+str(i)+"_image"+str(k)+".png")
+            pix.pixelfind()
+            #print(x, y, width, height)
+            # print(fun.view3d_find())

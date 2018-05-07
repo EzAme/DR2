@@ -1,4 +1,5 @@
 import bpy
+from bpy_extras.view3d_utils import location_3d_to_region_2d
 import os
 import random as rand
 from numpy.linalg import norm
@@ -378,7 +379,7 @@ def create_lamp(
     # print(theta, theta * 180 / pi)
     # print(phi, phi * 180 / pi)
     lamp_object.data.use_specular = 0
-    lamp_object.data.color = (1, 0.95, 0.3)
+    lamp_object.data.color = (1, 1, 0.7)
     lamp_object.location = (x, y, z)
     lamp_object.rotation_euler = (phi+rand.gauss(0, 0.17), 0, theta + pi / 2+rand.gauss(0, 0.17))
     lamp_object.data.energy = intensity
@@ -411,7 +412,7 @@ def create_lamp(
     Rr = norm([x, y, z], ord=2)
     xang = acos(z/Rr)
     lamp_object2.data.use_specular = 0
-    lamp_object2.data.color = (0.5, 0.95, 1)
+    lamp_object2.data.color = (0.7, 1, 1)
     lamp_object2.location = (x, y, z)
     lamp_object2.rotation_euler = (xang+rand.gauss(0, 0.08), 0, theta-pi/2+rand.gauss(0, 0.08))
     lamp_object2.data.energy = -2.9167*intensity+1.625
@@ -530,7 +531,7 @@ def move_obj(filename = "RowdyWalker#6"):
     # z = R*cos(phi)
     obj.location = (x*2.54,y*2.54, z)
     return xy
-# def get_pixel_position():
+
 
 # import sys
 # import os
