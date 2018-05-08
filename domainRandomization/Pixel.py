@@ -117,7 +117,7 @@ def pixelfind(id=""):
     # object location
     obj = bpy.data.objects["QuarterInAW"]  # the context object.
     obj.select = True
-    print(bpy.data.objects["QuarterInAW"])
+    # print(bpy.data.objects["QuarterInAW"])
     # print("obj", obj)
     # print("Location 3d to 2d:", location_3d_to_region_2d(region,rv3d,obj.matrix_world.to_translation()))
     # print("BLC:", blc)
@@ -134,10 +134,10 @@ def pixelfind(id=""):
     max_y = max(v.y for v in bbox_px) * ratio[1]
     bbox_width = (max_x - min_x)
     bbox_height = (max_y - min_y)
-    print("bbox_width",bbox_width)
-    print("bbox_height",bbox_height)
-    print("min_x",min_x)
-    print("max_y",max_y)
+    # print("bbox_width",bbox_width)
+    # print("bbox_height",bbox_height)
+    # print("min_x",min_x)
+    # print("max_y",max_y)
 
     # ... etc to get the coords of bbox.
     # print("obj verts",obj.data.vertices[0])
@@ -168,7 +168,7 @@ def view3d_find():
     # returns first 3d view, normally we get from context
     for area in bpy.context.window.screen.areas:
         if area.type == 'VIEW_3D':
-            area.spaces[0].region_3d.view_perspective = 'CAMERA'
+            # area.spaces[0].region_3d.view_perspective = 'CAMERA'
             v3d = area.spaces[0]
             rv3d = v3d.region_3d
             for region in area.regions:

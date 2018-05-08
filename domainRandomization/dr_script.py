@@ -71,12 +71,14 @@ if __name__ == "__main__":
             
         for k in range(ncams):
             fun.create_camera()
-
+            pix.pixelfind(id="")
             make_csv(val=0)
             if k == 0:
-                fun.render_scene(id="",ofilename="drimages/pos/" + ctime + "/set"+str(i)+"_image"+str(k)+".png")
+                fun.render_scene(id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
+
             else:
-                fun.render_scene(id=".00"+str(k),ofilename="drimages/pos/" + ctime + "/set"+str(i)+"_image"+str(k)+".png")
-            pix.pixelfind()
+                fun.render_scene(id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
+
+            # fun.clear_camera()
             #print(x, y, width, height)
             # print(fun.view3d_find())

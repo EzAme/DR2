@@ -296,6 +296,11 @@ def clean_up_scene():
             continue
         k.remove(k[i.name])
 
+def clear_camera():
+    # bpy.data.scenes.objects.unlink(bpy.data.objects["Camera"])
+    bpy.data.objects.remove(bpy.data.objects["Camera"])
+    # remove it
+
 
 
 def create_camera(
@@ -436,6 +441,7 @@ def render_scene(id="", ofilename='image' + str(id) + ".png"):
     bpy.context.scene.camera = bpy.data.objects['Camera' + str(id)]
     bpy.data.scenes['Scene'].render.filepath = ofilename
     bpy.ops.render.render(write_still=True)
+
 
 
 def randomize_texture():
