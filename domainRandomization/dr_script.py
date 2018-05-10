@@ -46,11 +46,11 @@ def makeascene(val=0):
 #                      range_phi=[0, 1.25],
 #                      size=0.1)
 
-def make_csv(val=0):
+def make_csv(val=0,p=[]):
     if val == 1:
         with open('drimages/Position/' + ctime + '.csv', 'a') as csvfile:
             writer = csv.writer(csvfile)
-            writer.writerow(pos)
+            writer.writerow(p)
 if __name__ == "__main__":
 
     # the number of scenes
@@ -85,7 +85,7 @@ if __name__ == "__main__":
             area.spaces[0].region_3d.view_perspective = 'CAMERA'
 
 
-            make_csv(val=0)
+
             if k == 0:
                 fun.render_scene(id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
 
@@ -98,4 +98,6 @@ if __name__ == "__main__":
         bpy.ops.wm.redraw_timer(type='DRAW_WIN_SWAP', iterations=1)
         #input("\nINPUT\n")
 
-        pix.pixelfind("QuarterInAW")
+        min_x,max_y,width,height=pix.pixelfind("QuarterInAW")
+        pospix = [pos,min_x,max_y,width,height]
+        make_csv(val=0,p=pospix)
