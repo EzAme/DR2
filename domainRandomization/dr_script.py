@@ -1,6 +1,7 @@
 # import the enviroment randomization function file
 import sys
 import os
+import bpy
 sys.path.append("/home/ez/DR2/domainRandomization")
 import pby_fun as fun
 import Pixel as pix
@@ -38,16 +39,24 @@ def makeascene(val=0):
     #     if area.type == 'VIEW_3D':
     #         area.spaces[0].region_3d.view_perspective = 'CAMERA'
     #         break
+# def importSTL():
+#     fun.import_rowdy(filename="QuarterInAW.stl",
+#                      R=[4, 6],
+#                      range_theta=[-0.7853981634, 2.3561944902],
+#                      range_phi=[0, 1.25],
+#                      size=0.1)
+
 def make_csv(val=0):
     if val == 1:
         with open('drimages/Position/' + ctime + '.csv', 'a') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow(pos)
 if __name__ == "__main__":
+
     # the number of scenes
     ctime=str(dt.datetime.now())
-    N = 10
-    ncams = 2
+    N = 2
+    ncams = 1
     N = int(N/ncams)
     makeascene()
 
@@ -68,10 +77,14 @@ if __name__ == "__main__":
             fun.create_lamp(R=10*30.48,
                     range_theta=[0,2*3.14159265],
                     range_phi=[0,3.14159265/4])
-            
+
+
         for k in range(ncams):
             fun.create_camera()
-            pix.pixelfind(id="")
+            area = next(area for area in bpy.context.screen.areas if area.type == 'VIEW_3D')
+            area.spaces[0].region_3d.view_perspective = 'CAMERA'
+
+
             make_csv(val=0)
             if k == 0:
                 fun.render_scene(id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
@@ -82,3 +95,7 @@ if __name__ == "__main__":
             # fun.clear_camera()
             #print(x, y, width, height)
             # print(fun.view3d_find())
+        bpy.ops.wm.redraw_timer(type='DRAW_WIN_SWAP', iterations=1)
+        #input("\nINPUT\n")
+
+        pix.pixelfind("QuarterInAW")

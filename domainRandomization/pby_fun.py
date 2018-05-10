@@ -297,7 +297,7 @@ def clean_up_scene():
         k.remove(k[i.name])
 
 def clear_camera():
-    # bpy.data.scenes.objects.unlink(bpy.data.objects["Camera"])
+    bpy.data.scenes.objects.unlink(bpy.data.objects["Camera"])
     bpy.data.objects.remove(bpy.data.objects["Camera"])
     # remove it
 
