@@ -87,10 +87,10 @@ if __name__ == "__main__":
 
 
             if k == 0:
-                fun.render_scene(id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
+                fun.render_scene(res=224, id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
 
             else:
-                fun.render_scene(id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
+                fun.render_scene(res=224, id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
 
             # fun.clear_camera()
             #print(x, y, width, height)
@@ -98,6 +98,6 @@ if __name__ == "__main__":
         bpy.ops.wm.redraw_timer(type='DRAW_WIN_SWAP', iterations=1)
         #input("\nINPUT\n")
 
-        min_x,max_y,width,height=pix.pixelfind("QuarterInAW")
-        pospix = [pos,min_x,max_y,width,height]
+        xmin,ymax,width,height=pix.pixelfind("QuarterInAW")
+        pospix = [pos,xmin,ymax,width,height]
         make_csv(val=0,p=pospix)

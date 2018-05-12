@@ -305,9 +305,9 @@ def clear_camera():
 
 def create_camera(
         Rx=[-0.25*30.48, 0.25*30.48],
-        Ry=[-0.5 * 30.48, -30.48],
-        Rz=[3.75 * 30.48, 4.25 * 30.48],
-        view_range=[60, 70]
+        Ry=[-30.48, -1.5*30.48],
+        Rz=[4 * 30.48, 4.5 * 30.48],
+        view_range=[35, 40]
 ):
     scene = bpy.context.scene
 
@@ -432,9 +432,9 @@ def create_lamp(
     return scene
 
 
-def render_scene(id="", ofilename='image' + str(id) + ".png"):
-    bpy.context.scene.render.resolution_x = 227
-    bpy.context.scene.render.resolution_y = 227
+def render_scene(res=0, id="", ofilename='image' + str(id) + ".png"):
+    bpy.context.scene.render.resolution_x = res
+    bpy.context.scene.render.resolution_y = res
     bpy.context.scene.render.resolution_percentage = 100
 
     bpy.context.scene.cycles.device = 'GPU'

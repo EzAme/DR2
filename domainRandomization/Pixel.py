@@ -58,7 +58,7 @@ def pixelfind(id=""):
     blc = min(frame_px)
     cambounds = [v - blc for v in frame_px]
     print("camera is on screen as :", max(cambounds))
-    ratio = 227 / max(cambounds[0])
+    ratio = 224 / max(cambounds[0])
     # print("ratio is ", ratio)
     bpy.ops.object.select_all(action='DESELECT')
     if id == "":
@@ -100,5 +100,6 @@ def pixelfind(id=""):
     pixel_height = max_ys - min_ys
     print(min_xs, max_xs,min_ys,max_ys,pixel_width,pixel_height)
     bpy.ops.object.select_all(action='DESELECT')
-    return min_xs, max_ys, pixel_width, pixel_height
+
+    return  min_xs, 224 - max_ys, pixel_width, pixel_height
 #pixelfind(id="QuarterInAW")
