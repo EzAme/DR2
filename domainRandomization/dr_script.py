@@ -34,6 +34,11 @@ def makeascene(val=0):
                      range_theta=[-0.7853981634, 2.3561944902],
                      range_phi=[0, 1.25],
                      size=0.1)
+    fun.import_rowdy(filename="QuarterInAW1.stl",
+                     R=[4, 6],
+                     range_theta=[-0.7853981634, 2.3561944902],
+                     range_phi=[0, 1.25],
+                     size=0.1)
     fun.create_flat_background()
     # for area in bpy.context.screen.areas:
     #     if area.type == 'VIEW_3D':
@@ -54,6 +59,7 @@ def make_csv(val=0,p=[]):
 if __name__ == "__main__":
 
     # the number of scenes
+    record=0;
     ctime=str(dt.datetime.now())
     N = 2
     ncams = 1
@@ -65,7 +71,8 @@ if __name__ == "__main__":
         p = 1
         j = randint(0, 7)
         fun.clean_up_scene()
-        pos=fun.move_obj(filename="QuarterInAW.stl")
+        pos = fun.move_obj(filename="QuarterInAW.stl")
+        pos = fun.move_obj(filename="QuarterInAW1.stl")
 
 
 
@@ -85,12 +92,12 @@ if __name__ == "__main__":
             area.spaces[0].region_3d.view_perspective = 'CAMERA'
 
 
+            if record == 1:
+                if k == 0:
+                    fun.render_scene(res=224, id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
 
-            if k == 0:
-                fun.render_scene(res=224, id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
-
-            else:
-                fun.render_scene(res=224, id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
+                else:
+                    fun.render_scene(res=224, id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
 
             # fun.clear_camera()
             #print(x, y, width, height)
@@ -99,5 +106,6 @@ if __name__ == "__main__":
         #input("\nINPUT\n")
 
         xmin,ymax,width,height=pix.pixelfind("QuarterInAW")
-        pospix = [pos,xmin,ymax,width,height]
-        make_csv(val=0,p=pospix)
+        xmin1, ymax1, width1, height1 = pix.pixelfind("QuarterInAW1")
+        pospix = [pos,[xmin,ymax,width,height; xmin1, ymax1, width1, height1]]
+        make_csv(val=record,p=pospix)

@@ -42,6 +42,7 @@ def initialPix():
     print("camera is on screen as :", max(cambounds))
 
 def pixelfind(id=""):
+
     print("\n\n")
     bpy.context.scene.camera = bpy.data.objects['Camera']
 
@@ -57,7 +58,7 @@ def pixelfind(id=""):
 
     blc = min(frame_px)
     cambounds = [v - blc for v in frame_px]
-    print("camera is on screen as :", max(cambounds))
+    # print("camera is on screen as :", max(cambounds))
     ratio = 224 / max(cambounds[0])
     # print("ratio is ", ratio)
     bpy.ops.object.select_all(action='DESELECT')
@@ -98,7 +99,7 @@ def pixelfind(id=""):
     max_ys = (max(v.y for v in verts_px))*ratio
     pixel_width = max_xs - min_xs
     pixel_height = max_ys - min_ys
-    print(min_xs, max_xs,min_ys,max_ys,pixel_width,pixel_height)
+    # print(min_xs, max_xs,min_ys,max_ys,pixel_width,pixel_height)
     bpy.ops.object.select_all(action='DESELECT')
 
     return  min_xs, 224 - max_ys, pixel_width, pixel_height

@@ -294,6 +294,8 @@ def clean_up_scene():
             continue
         if i.name == "QuarterInAW":
             continue
+        if i.name == "QuarterInAW1":
+            continue
         k.remove(k[i.name])
 
 def clear_camera():
@@ -483,7 +485,8 @@ def import_rowdy(filename="RowdyWalker#6",
     filename = os.path.splitext(filename)[0]
     # # print(filename)
     # # capitalize the filename for some fkin reason
-    obj = bpy.data.objects[filename]  # .capitalize()]
+    obj = bpy.data.objects[filename]
+    print(filename)# .capitalize()]
     obj.scale = [0.1, 0.1, 0.1]
     ################
     # print(filename)
