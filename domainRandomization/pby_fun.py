@@ -364,7 +364,7 @@ def create_lamp(
         range_theta=[0, 2*pi],
         range_phi=[0, pi/4]):
     scene = bpy.context.scene
-    intensity = rand.uniform(0.3, 0.5)
+    intensity = rand.uniform(0.2, 0.5)
     # Create new lamp datablock
     lamp_data = bpy.data.lamps.new(name="New Lamp", type='AREA')
 
@@ -422,7 +422,7 @@ def create_lamp(
     lamp_object2.data.color = (0.7, 1, 1)
     lamp_object2.location = (x, y, z)
     lamp_object2.rotation_euler = (xang+rand.gauss(0, 0.08), 0, theta-pi/2+rand.gauss(0, 0.08))
-    lamp_object2.data.energy = -2.9167*intensity+1.625
+    lamp_object2.data.energy = -2.9167*intensity+1.625+rand.gauss(0, 0.05)
     lamp_object2.data.distance = 300
     lamp_object2.data.gamma = 0.9
     lamp_object2.data.shadow_method = "NOSHADOW"
@@ -463,9 +463,17 @@ def randomize_texture():
     #         obj.data.materials.append(mat)
     for i in bpy.data.objects:
         if i.type == "MESH":
-            # print(i.name, i.type)
-            mat = bpy.data.materials.new(name=i.name + 'Mat')
-            mat.diffuse_color = (rand.random(), rand.random(), rand.random())
+            # # print(i.name, i.type)
+            # mat = bpy.data.materials.new(name=i.name + 'Mat')
+            # mat.diffuse_color = (rand.random(), rand.random(), rand.random())
+            # if len(i.material_slots) > 1:
+            #     bpy.data.objects[i.name].material_slots[0].material = mat
+            # else:
+            #     bpy.data.objects[i.name].data.materials.append(mat)
+            # bpy.ops.object.material_slot_assign()
+            # bpy.data.objects.materials.pop(0, update_data=True)
+            mat = tex.createMaterials(name=i.name, n=rand.randint(0, 2))
+            # print(i.name)
             if len(i.material_slots) > 1:
                 bpy.data.objects[i.name].material_slots[0].material = mat
             else:

@@ -72,7 +72,7 @@ if __name__ == "__main__":
         j = randint(0, 7)
         fun.clean_up_scene()
         pos = fun.move_obj(filename="QuarterInAW.stl")
-        pos = fun.move_obj(filename="QuarterInAW1.stl")
+        pos1 = fun.move_obj(filename="QuarterInAW1.stl")
 
 
 
@@ -94,10 +94,10 @@ if __name__ == "__main__":
 
             if record == 1:
                 if k == 0:
-                    fun.render_scene(res=224, id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
+                    fun.render_scene(res=448, id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
 
                 else:
-                    fun.render_scene(res=224, id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
+                    fun.render_scene(res=448, id="", ofilename="drimages/pos/" + ctime + "/set" + str(i) + "_image" + str(k) + ".png")
 
             # fun.clear_camera()
             #print(x, y, width, height)
@@ -105,7 +105,7 @@ if __name__ == "__main__":
         bpy.ops.wm.redraw_timer(type='DRAW_WIN_SWAP', iterations=1)
         #input("\nINPUT\n")
 
-        xmin,ymax,width,height=pix.pixelfind("QuarterInAW")
-        xmin1, ymax1, width1, height1 = pix.pixelfind("QuarterInAW1")
-        pospix = [pos,[xmin,ymax,width,height; xmin1, ymax1, width1, height1]]
+        xmin,ymax,width,height=pix.pixelfind(res=448,id="QuarterInAW")
+        xmin1, ymax1, width1, height1 = pix.pixelfind(res=448,id="QuarterInAW1")
+        pospix = pos[0],pos[1],pos1[0],pos1[1],xmin,ymax,width,height, xmin1, ymax1, width1, height1
         make_csv(val=record,p=pospix)
