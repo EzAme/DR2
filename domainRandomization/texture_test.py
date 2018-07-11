@@ -20,18 +20,18 @@ def createMaterials(name="",n=0):
         mat.diffuse_intensity=0.75
         mat.alpha = 0
         mat.diffuse_color = (rand.random(), rand.random(), rand.random())
-
+        mat.emit = rand.random() * 1.25
     # Map marble to specularity
     #     mat.add_texture(texture = mbtex, texture_coordinates = 'UV', map_to = 'SPECULARITY')
         slot= mat.texture_slots.add()
         # print(slot)
         slot.texture = mbtex
-        slot.texture_coords = 'OBJECT'
+        slot.texture_coords = 'ORCO'
         slot.blend_type = 'MIX'
         slot.color=(rand.random(), rand.random(), rand.random())
-        mat.texture_slots[0].scale[0] = rand.random()*15
-        mat.texture_slots[0].scale[1] = rand.random()*15
-        mat.texture_slots[0].scale[2] = rand.random()*15
+        mat.texture_slots[0].scale[0] = (rand.random()*2-1)*25
+        mat.texture_slots[0].scale[1] = (rand.random()*2-1)*25
+        mat.texture_slots[0].scale[2] = (rand.random()*2-1)*25
 
     # Pick active object, remove its old mate# Delete excess materials
     # for material in bpy.data.materials:
@@ -57,27 +57,28 @@ def createMaterials(name="",n=0):
         mat.diffuse_shader = 'LAMBERT'
         mat.alpha = 0
         mat.diffuse_color = (rand.random(), rand.random(), rand.random())
-
+        mat.emit = rand.random() * 1.25
         # Map marble to specularity
         #     mat.add_texture(texture = mbtex, texture_coordinates = 'UV', map_to = 'SPECULARITY')
         slot = mat.texture_slots.add()
         # print(slot)
         slot.texture = mbtex
-        slot.texture_coords = 'OBJECT'
+        slot.texture_coords = 'ORCO'
         slot.blend_type = 'MIX'
-        slot.offset[0]=2.0
-        slot.offset[1] = 1.0
-        slot.scale[0]=0.2
-        slot.scale[1] = 0.2
-        slot.scale[2]=0.2
+        slot.offset[0]=(rand.random()*2-1)/1000
+        slot.offset[1] = (rand.random()*2-1)/1000
+        slot.scale[0]= rand.random()+0.7
+        slot.scale[1] = rand.random()+0.7
+        slot.scale[2]= rand.random()+0.7
         slot.color = (rand.random(), rand.random(), rand.random())
         #######################################################################################
     else:
         mat = bpy.data.materials.new(name= name + 'Mat')
         mat.diffuse_color = (rand.random(), rand.random(), rand.random())
+        mat.emit=rand.random()*1.25
     if rand.random() > 0.80:
         mat.raytrace_mirror.use=1
-        mat.raytrace_mirror.reflect_factor=rand.random()*0.8
+        mat.raytrace_mirror.reflect_factor=rand.random()*0.6
     return mat
 
 
