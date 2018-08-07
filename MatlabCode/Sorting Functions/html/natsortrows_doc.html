@@ -1,0 +1,225 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>NATSORTROWS Examples</title><meta name="generator" content="MATLAB 7.11"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2018-03-25"><meta name="DC.source" content="natsortrows_doc.m"><style type="text/css">
+
+body {
+  background-color: white;
+  margin:10px;
+}
+
+h1 {
+  color: #990000; 
+  font-size: x-large;
+}
+
+h2 {
+  color: #990000;
+  font-size: medium;
+}
+
+/* Make the text shrink to fit narrow windows, but not stretch too far in 
+wide windows. */ 
+p,h1,h2,div.content div {
+  max-width: 600px;
+  /* Hack for IE6 */
+  width: auto !important; width: 600px;
+}
+
+pre.codeinput {
+  background: #EEEEEE;
+  padding: 10px;
+}
+@media print {
+  pre.codeinput {word-wrap:break-word; width:100%;}
+} 
+
+span.keyword {color: #0000FF}
+span.comment {color: #228B22}
+span.string {color: #A020F0}
+span.untermstring {color: #B20000}
+span.syscmd {color: #B28C00}
+
+pre.codeoutput {
+  color: #666666;
+  padding: 10px;
+}
+
+pre.error {
+  color: red;
+}
+
+p.footer {
+  text-align: right;
+  font-size: xx-small;
+  font-weight: lighter;
+  font-style: italic;
+  color: gray;
+}
+
+  </style></head><body><div class="content"><h1>NATSORTROWS Examples</h1><!--introduction--><p>The function <a href="https://www.mathworks.com/matlabcentral/fileexchange/47433"><tt>NATSORTROWS</tt></a> sorts the rows of a cell array of strings (1xN char), taking into account any number values within the strings. This is known as a <i>natural order sort</i> or an <i>alphanumeric sort</i>. Note that MATLAB's inbuilt <a href="http://www.mathworks.com/help/matlab/ref/sortrows.html"><tt>SORTROWS</tt></a> function sorts only by character order.</p><p>For sorting filenames or filepaths use <a href="https://www.mathworks.com/matlabcentral/fileexchange/47434"><tt>NATSORTFILES</tt></a>.</p><p>For sorting a cell array of strings use <a href="https://www.mathworks.com/matlabcentral/fileexchange/34464"><tt>NATSORT</tt></a>.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Basic Usage:</a></li><li><a href="#2">Output 2: Sort Index</a></li><li><a href="#3">Output 3: Debugging Array</a></li><li><a href="#4">Sort Direction: <tt>'ascend'</tt> or <tt>'descend'</tt> Argument</a></li><li><a href="#5">Sort Direction: <tt>SORTROWS</tt> Column Argument</a></li><li><a href="#6">Regular Expression: Decimal Numbers, E-notation, +/- Sign.</a></li><li><a href="#7">Regular Expression: Interactive Regular Expression Tool</a></li></ul></div><h2>Basic Usage:<a name="1"></a></h2><p>By default <tt>NATSORTROWS</tt> interprets consecutive digits as being part of a single integer, each number is considered to be as wide as one letter:</p><pre class="codeinput">A = {<span class="string">'B1'</span>,<span class="string">'X2'</span>;<span class="string">'A1'</span>,<span class="string">'X100'</span>;<span class="string">'B1'</span>,<span class="string">'X10'</span>;<span class="string">'A2'</span>,<span class="string">'X2'</span>;<span class="string">'A1'</span>,<span class="string">'X20'</span>;<span class="string">'A10'</span>,<span class="string">'X1'</span>;<span class="string">'A2'</span>,<span class="string">'X0'</span>};
+sortrows(A)
+natsortrows(A)
+</pre><pre class="codeoutput">ans = 
+    'A1'     'X100'
+    'A1'     'X20' 
+    'A10'    'X1'  
+    'A2'     'X0'  
+    'A2'     'X2'  
+    'B1'     'X10' 
+    'B1'     'X2'  
+ans = 
+    'A1'     'X20' 
+    'A1'     'X100'
+    'A2'     'X0'  
+    'A2'     'X2'  
+    'A10'    'X1'  
+    'B1'     'X2'  
+    'B1'     'X10' 
+</pre><h2>Output 2: Sort Index<a name="2"></a></h2><p>The second output argument is a numeric array of the sort indices <tt>ndx</tt>, such that <tt>Y = X(ndx,:)</tt> where  for <tt>Y = natsortrows(X)</tt>:</p><pre class="codeinput">[~,ndx] = natsortrows(A)
+</pre><pre class="codeoutput">ndx =
+     5
+     2
+     7
+     4
+     6
+     1
+     3
+</pre><h2>Output 3: Debugging Array<a name="3"></a></h2><p>The third output is a cell vector of cell arrays, where each cell array contains individual characters and numbers (after converting to numeric). This is useful for confirming that the numbers are being correctly identified by the regular expression. The cells of the cell vector correspond to the columns of the original input cell matrix.</p><pre class="codeinput">[~,~,dbg] = natsortrows(A);
+dbg{:}
+</pre><pre class="codeoutput">ans = 
+    'B'    [ 1]
+    'A'    [ 1]
+    'B'    [ 1]
+    'A'    [ 2]
+    'A'    [ 1]
+    'A'    [10]
+    'A'    [ 2]
+ans = 
+    'X'    [  2]
+    'X'    [100]
+    'X'    [ 10]
+    'X'    [  2]
+    'X'    [ 20]
+    'X'    [  1]
+    'X'    [  0]
+</pre><h2>Sort Direction: <tt>'ascend'</tt> or <tt>'descend'</tt> Argument<a name="4"></a></h2><p>The second input argument may be either <tt>'ascend'</tt> or <tt>'descend'</tt>, and all columns will be sorted accordingly:</p><pre class="codeinput">natsortrows(A,<span class="string">'ascend'</span>)
+natsortrows(A,<span class="string">'descend'</span>)
+</pre><pre class="codeoutput">ans = 
+    'A1'     'X20' 
+    'A1'     'X100'
+    'A2'     'X0'  
+    'A2'     'X2'  
+    'A10'    'X1'  
+    'B1'     'X2'  
+    'B1'     'X10' 
+ans = 
+    'B1'     'X10' 
+    'B1'     'X2'  
+    'A10'    'X1'  
+    'A2'     'X2'  
+    'A2'     'X0'  
+    'A1'     'X100'
+    'A1'     'X20' 
+</pre><h2>Sort Direction: <tt>SORTROWS</tt> Column Argument<a name="5"></a></h2><p>The second input argument may be a numeric vector of column indices, exactly as per MATLAB's <tt>SORTROWS</tt>, where a positive integer will sort the corresponding column in ascending order, and a negative integer will sort the corresponding column in descending order. In this example the second column is sorted ascending, and the third descending:</p><pre class="codeinput">sortrows(A,[-2,1]) <span class="comment">% wrong numeric order:</span>
+natsortrows(A,[-2,1]) <span class="comment">% correct numeric order:</span>
+</pre><pre class="codeoutput">ans = 
+    'A1'     'X20' 
+    'A2'     'X2'  
+    'B1'     'X2'  
+    'A1'     'X100'
+    'B1'     'X10' 
+    'A10'    'X1'  
+    'A2'     'X0'  
+ans = 
+    'A1'     'X100'
+    'A1'     'X20' 
+    'B1'     'X10' 
+    'A2'     'X2'  
+    'B1'     'X2'  
+    'A10'    'X1'  
+    'A2'     'X0'  
+</pre><h2>Regular Expression: Decimal Numbers, E-notation, +/- Sign.<a name="6"></a></h2><p><tt>NATSORTROWS</tt> is a wrapper for <tt>NATSORT</tt>, which means all of <tt>NATSORT</tt>'s options are also supported. In particular the number recognition can be customized to detect numbers with decimal digits, E-notation, a +/- sign, or other specific features. This detection is defined by providing an appropriate regular expression: see <tt>NATSORT</tt> for details and examples.</p><pre class="codeinput">G = {<span class="string">'v10.2'</span>,<span class="string">'b'</span>; <span class="string">'v2.5'</span>,<span class="string">'b'</span>; <span class="string">'v2.40'</span>,<span class="string">'a'</span>; <span class="string">'v1.9'</span>,<span class="string">'b'</span>};
+natsortrows(G) <span class="comment">% integers, e.g. version numbers</span>
+natsortrows(G,[],<span class="string">'\d+\.?\d*'</span>) <span class="comment">% decimal values</span>
+</pre><pre class="codeoutput">ans = 
+    'v1.9'     'b'
+    'v2.5'     'b'
+    'v2.40'    'a'
+    'v10.2'    'b'
+ans = 
+    'v1.9'     'b'
+    'v2.40'    'a'
+    'v2.5'     'b'
+    'v10.2'    'b'
+</pre><h2>Regular Expression: Interactive Regular Expression Tool<a name="7"></a></h2><p>Regular expressions are powerful and compact, but getting them right is not always easy. One assistance is to download my interactive tool <a href="https://www.mathworks.com/matlabcentral/fileexchange/48930"><tt>IREGEXP</tt></a>, which lets you quickly try different regular expressions and see all of <a href="https://www.mathworks.com/help/matlab/ref/regexp.html"><tt>REGEXP</tt></a>'s outputs displayed and updated as you type.</p><p class="footer"><br>
+      Published with MATLAB&reg; 7.11<br></p></div><!--
+##### SOURCE BEGIN #####
+%% NATSORTROWS Examples
+% The function <https://www.mathworks.com/matlabcentral/fileexchange/47433
+% |NATSORTROWS|> sorts the rows of a cell array of strings (1xN char), taking
+% into account any number values within the strings. This is known as a
+% _natural order sort_ or an _alphanumeric sort_. Note that MATLAB's inbuilt
+% <http://www.mathworks.com/help/matlab/ref/sortrows.html |SORTROWS|>
+% function sorts only by character order.
+%
+% For sorting filenames or filepaths use
+% <https://www.mathworks.com/matlabcentral/fileexchange/47434 |NATSORTFILES|>.
+%
+% For sorting a cell array of strings use
+% <https://www.mathworks.com/matlabcentral/fileexchange/34464 |NATSORT|>.
+%
+%% Basic Usage:
+% By default |NATSORTROWS| interprets consecutive digits as being part of
+% a single integer, each number is considered to be as wide as one letter:
+A = {'B1','X2';'A1','X100';'B1','X10';'A2','X2';'A1','X20';'A10','X1';'A2','X0'};
+sortrows(A)
+natsortrows(A)
+%% Output 2: Sort Index
+% The second output argument is a numeric array of the sort indices |ndx|,
+% such that |Y = X(ndx,:)| where  for |Y = natsortrows(X)|:
+[~,ndx] = natsortrows(A)
+%% Output 3: Debugging Array
+% The third output is a cell vector of cell arrays, where each cell array
+% contains individual characters and numbers (after converting to numeric).
+% This is useful for confirming that the numbers are being correctly
+% identified by the regular expression. The cells of the cell vector
+% correspond to the columns of the original input cell matrix.
+[~,~,dbg] = natsortrows(A);
+dbg{:}
+%% Sort Direction: |'ascend'| or |'descend'| Argument
+% The second input argument may be either |'ascend'| or |'descend'|, and
+% all columns will be sorted accordingly:
+natsortrows(A,'ascend')
+natsortrows(A,'descend')
+%% Sort Direction: |SORTROWS| Column Argument
+% The second input argument may be a numeric vector of column indices,
+% exactly as per MATLAB's |SORTROWS|, where a positive integer will sort
+% the corresponding column in ascending order, and a negative integer will
+% sort the corresponding column in descending order. In this example the
+% second column is sorted ascending, and the third descending:
+sortrows(A,[-2,1]) % wrong numeric order:
+natsortrows(A,[-2,1]) % correct numeric order:
+%% Regular Expression: Decimal Numbers, E-notation, +/- Sign.
+% |NATSORTROWS| is a wrapper for |NATSORT|, which means all of |NATSORT|'s
+% options are also supported. In particular the number recognition can be
+% customized to detect numbers with decimal digits, E-notation, a +/- sign,
+% or other specific features. This detection is defined by providing an
+% appropriate regular expression: see |NATSORT| for details and examples.
+G = {'v10.2','b'; 'v2.5','b'; 'v2.40','a'; 'v1.9','b'};
+natsortrows(G) % integers, e.g. version numbers
+natsortrows(G,[],'\d+\.?\d*') % decimal values
+%% Regular Expression: Interactive Regular Expression Tool
+% Regular expressions are powerful and compact, but getting them right is
+% not always easy. One assistance is to download my interactive tool
+% <https://www.mathworks.com/matlabcentral/fileexchange/48930 |IREGEXP|>,
+% which lets you quickly try different regular expressions and see all of
+% <https://www.mathworks.com/help/matlab/ref/regexp.html |REGEXP|>'s
+% outputs displayed and updated as you type.
+##### SOURCE END #####
+--></body></html>
